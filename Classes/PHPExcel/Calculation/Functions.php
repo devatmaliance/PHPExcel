@@ -591,7 +591,7 @@ class PHPExcel_Calculation_Functions
             //    Range of cells is an error
             if (self::isCellValue($a)) {
                 return 16;
-            //    Test for Matrix
+                //    Test for Matrix
             } elseif (self::isMatrixValue($a)) {
                 return 64;
             }
@@ -602,11 +602,11 @@ class PHPExcel_Calculation_Functions
         $value = self::flattenSingleValue($value);
 
         if (($value === null) || (is_float($value)) || (is_int($value))) {
-                return 1;
+            return 1;
         } elseif (is_bool($value)) {
-                return 4;
+            return 4;
         } elseif (is_array($value)) {
-                return 64;
+            return 64;
         } elseif (is_string($value)) {
             //    Errors
             if ((strlen($value) > 0) && ($value[0] == '#')) {

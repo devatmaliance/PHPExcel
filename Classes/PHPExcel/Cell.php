@@ -226,7 +226,7 @@ class PHPExcel_Cell
                 break;
             case PHPExcel_Cell_DataType::TYPE_STRING2:
                 $pDataType = PHPExcel_Cell_DataType::TYPE_STRING;
-                // no break
+            // no break
             case PHPExcel_Cell_DataType::TYPE_STRING:
                 // Synonym for string
             case PHPExcel_Cell_DataType::TYPE_INLINE:
@@ -570,8 +570,8 @@ class PHPExcel_Cell
 
         // Verify if cell is in range
         return (($rangeStart[0] <= $myColumn) && ($rangeEnd[0] >= $myColumn) &&
-                ($rangeStart[1] <= $myRow) && ($rangeEnd[1] >= $myRow)
-               );
+            ($rangeStart[1] <= $myRow) && ($rangeEnd[1] >= $myRow)
+        );
     }
 
     /**
@@ -843,11 +843,11 @@ class PHPExcel_Cell
                 $_indexCache[$pColumnIndex] = chr(65 + $pColumnIndex);
             } elseif ($pColumnIndex < 702) {
                 $_indexCache[$pColumnIndex] = chr(64 + ($pColumnIndex / 26)) .
-                                              chr(65 + $pColumnIndex % 26);
+                    chr(65 + $pColumnIndex % 26);
             } else {
                 $_indexCache[$pColumnIndex] = chr(64 + (($pColumnIndex - 26) / 676)) .
-                                              chr(65 + ((($pColumnIndex - 26) % 676) / 26)) .
-                                              chr(65 + $pColumnIndex % 26);
+                    chr(65 + ((($pColumnIndex - 26) % 676) / 26)) .
+                    chr(65 + $pColumnIndex % 26);
             }
         }
         return $_indexCache[$pColumnIndex];
