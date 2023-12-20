@@ -226,7 +226,7 @@ class PHPExcel_Cell
                 break;
             case PHPExcel_Cell_DataType::TYPE_STRING2:
                 $pDataType = PHPExcel_Cell_DataType::TYPE_STRING;
-                // no break
+            // no break
             case PHPExcel_Cell_DataType::TYPE_STRING:
                 // Synonym for string
             case PHPExcel_Cell_DataType::TYPE_INLINE:
@@ -570,8 +570,8 @@ class PHPExcel_Cell
 
         // Verify if cell is in range
         return (($rangeStart[0] <= $myColumn) && ($rangeEnd[0] >= $myColumn) &&
-                ($rangeStart[1] <= $myRow) && ($rangeEnd[1] >= $myRow)
-               );
+            ($rangeStart[1] <= $myRow) && ($rangeEnd[1] >= $myRow)
+        );
     }
 
     /**
@@ -809,15 +809,15 @@ class PHPExcel_Cell
 
         //    We also use the language construct isset() rather than the more costly strlen() function to match the length of $pString
         //        for improved performance
-        if (isset($pString{0})) {
-            if (!isset($pString{1})) {
+        if (isset($pString[0])) {
+            if (!isset($pString[1])) {
                 $_indexCache[$pString] = $_columnLookup[$pString];
                 return $_indexCache[$pString];
-            } elseif (!isset($pString{2})) {
-                $_indexCache[$pString] = $_columnLookup[$pString{0}] * 26 + $_columnLookup[$pString{1}];
+            } elseif (!isset($pString[2])) {
+                $_indexCache[$pString] = $_columnLookup[$pString[0]] * 26 + $_columnLookup[$pString[1]];
                 return $_indexCache[$pString];
-            } elseif (!isset($pString{3})) {
-                $_indexCache[$pString] = $_columnLookup[$pString{0}] * 676 + $_columnLookup[$pString{1}] * 26 + $_columnLookup[$pString{2}];
+            } elseif (!isset($pString[3])) {
+                $_indexCache[$pString] = $_columnLookup[$pString[0]] * 676 + $_columnLookup[$pString[1]] * 26 + $_columnLookup[$pString[2]];
                 return $_indexCache[$pString];
             }
         }
@@ -843,11 +843,11 @@ class PHPExcel_Cell
                 $_indexCache[$pColumnIndex] = chr(65 + $pColumnIndex);
             } elseif ($pColumnIndex < 702) {
                 $_indexCache[$pColumnIndex] = chr(64 + ($pColumnIndex / 26)) .
-                                              chr(65 + $pColumnIndex % 26);
+                    chr(65 + $pColumnIndex % 26);
             } else {
                 $_indexCache[$pColumnIndex] = chr(64 + (($pColumnIndex - 26) / 676)) .
-                                              chr(65 + ((($pColumnIndex - 26) % 676) / 26)) .
-                                              chr(65 + $pColumnIndex % 26);
+                    chr(65 + ((($pColumnIndex - 26) % 676) / 26)) .
+                    chr(65 + $pColumnIndex % 26);
             }
         }
         return $_indexCache[$pColumnIndex];

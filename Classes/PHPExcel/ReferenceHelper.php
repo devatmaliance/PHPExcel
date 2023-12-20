@@ -252,7 +252,7 @@ class PHPExcel_ReferenceHelper
     {
         $aDataValidationCollection = $pSheet->getDataValidationCollection();
         ($pNumCols > 0 || $pNumRows > 0) ? uksort($aDataValidationCollection, array('PHPExcel_ReferenceHelper','cellReverseSort')) : uksort($aDataValidationCollection, array('PHPExcel_ReferenceHelper','cellSort'));
-        
+
         foreach ($aDataValidationCollection as $key => $value) {
             $newReference = $this->updateCellReference($key, $pBefore, $pNumCols, $pNumRows);
             if ($key != $newReference) {
@@ -444,7 +444,7 @@ class PHPExcel_ReferenceHelper
                 if ($cell->getDataType() == PHPExcel_Cell_DataType::TYPE_FORMULA) {
                     // Formula should be adjusted
                     $pSheet->getCell($newCoordinates)
-                           ->setValue($this->updateFormulaReferences($cell->getValue(), $pBefore, $pNumCols, $pNumRows, $pSheet->getTitle()));
+                        ->setValue($this->updateFormulaReferences($cell->getValue(), $pBefore, $pNumCols, $pNumRows, $pSheet->getTitle()));
                 } else {
                     // Formula should not be adjusted
                     $pSheet->getCell($newCoordinates)->setValue($cell->getValue());
@@ -782,7 +782,7 @@ class PHPExcel_ReferenceHelper
         // Is it in another worksheet? Will not have to update anything.
         if (strpos($pCellRange, "!") !== false) {
             return $pCellRange;
-        // Is it a range or a single cell?
+            // Is it a range or a single cell?
         } elseif (strpos($pCellRange, ':') === false && strpos($pCellRange, ',') === false) {
             // Single cell
             return $this->updateSingleCellReference($pCellRange, $pBefore, $pNumCols, $pNumRows);
@@ -881,8 +881,8 @@ class PHPExcel_ReferenceHelper
             list($newColumn, $newRow) = PHPExcel_Cell::coordinateFromString($pCellReference);
 
             // Verify which parts should be updated
-            $updateColumn = (($newColumn{0} != '$') && ($beforeColumn{0} != '$') && (PHPExcel_Cell::columnIndexFromString($newColumn) >= PHPExcel_Cell::columnIndexFromString($beforeColumn)));
-            $updateRow = (($newRow{0} != '$') && ($beforeRow{0} != '$') && $newRow >= $beforeRow);
+            $updateColumn = (($newColumn[0] != '$') && ($beforeColumn[0] != '$') && (PHPExcel_Cell::columnIndexFromString($newColumn) >= PHPExcel_Cell::columnIndexFromString($beforeColumn)));
+            $updateRow = (($newRow[0] != '$') && ($beforeRow[0] != '$') && $newRow >= $beforeRow);
 
             // Create new column reference
             if ($updateColumn) {

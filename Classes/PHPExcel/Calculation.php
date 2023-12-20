@@ -269,7 +269,7 @@ class PHPExcel_Calculation
         'NULL'  => null
     );
 
-     //    PHPExcel functions
+    //    PHPExcel functions
     private static $PHPExcelFunctions = array(
         'ABS' => array(
             'category' => PHPExcel_Calculation_Function::CATEGORY_MATH_AND_TRIG,
@@ -2102,7 +2102,7 @@ class PHPExcel_Calculation
         if ($workbook !== null) {
             $instance = $workbook->getCalculationEngine();
             if (isset($instance)) {
-                return $instance;  
+                return $instance;
             }
         }
 
@@ -2530,7 +2530,7 @@ class PHPExcel_Calculation
             }
             //    Return strings wrapped in quotes
             return '"'.$value.'"';
-        //    Convert numeric errors to NaN error
+            //    Convert numeric errors to NaN error
         } elseif ((is_float($value)) && ((is_nan($value)) || (is_infinite($value)))) {
             return PHPExcel_Calculation_Functions::NaN();
         }
@@ -2548,10 +2548,10 @@ class PHPExcel_Calculation
     public static function unwrapResult($value)
     {
         if (is_string($value)) {
-            if ((isset($value{0})) && ($value{0} == '"') && (substr($value, -1) == '"')) {
+            if ((isset($value[0])) && ($value[0] == '"') && (substr($value, -1) == '"')) {
                 return substr($value, 1, -1);
             }
-        //    Convert numeric errors to NaN error
+            //    Convert numeric errors to NaN error
         } elseif ((is_float($value)) && ((is_nan($value)) || (is_infinite($value)))) {
             return PHPExcel_Calculation_Functions::NaN();
         }
@@ -2669,11 +2669,11 @@ class PHPExcel_Calculation
         //    Basic validation that this is indeed a formula
         //    We return an empty array if not
         $formula = trim($formula);
-        if ((!isset($formula{0})) || ($formula{0} != '=')) {
+        if ((!isset($formula[0])) || ($formula[0] != '=')) {
             return array();
         }
         $formula = ltrim(substr($formula, 1));
-        if (!isset($formula{0})) {
+        if (!isset($formula[0])) {
             return array();
         }
 
@@ -2761,11 +2761,11 @@ class PHPExcel_Calculation
         //    Basic validation that this is indeed a formula
         //    We simply return the cell value if not
         $formula = trim($formula);
-        if ($formula{0} != '=') {
+        if ($formula[0] != '=') {
             return self::wrapResult($formula);
         }
         $formula = ltrim(substr($formula, 1));
-        if (!isset($formula{0})) {
+        if (!isset($formula[0])) {
             return self::wrapResult($formula);
         }
 
@@ -2777,7 +2777,7 @@ class PHPExcel_Calculation
             return $cellValue;
         }
 
-        if (($wsTitle{0} !== "\x00") && ($this->cyclicReferenceStack->onStack($wsCellReference))) {
+        if (($wsTitle[0] !== "\x00") && ($this->cyclicReferenceStack->onStack($wsCellReference))) {
             if ($this->cyclicFormulaCount <= 0) {
                 $this->cyclicFormulaCell = '';
                 return $this->raiseFormulaError('Cyclic Reference in Formula');
@@ -3031,7 +3031,7 @@ class PHPExcel_Calculation
             } else {
                 if ($value == '') {
                     return 'an empty string';
-                } elseif ($value{0} == '#') {
+                } elseif ($value[0] == '#') {
                     return 'a '.$value.' error';
                 } else {
                     $typeString = 'a string';
@@ -3143,30 +3143,30 @@ class PHPExcel_Calculation
         $pCellParent = ($pCell !== null) ? $pCell->getWorksheet() : null;
 
         $regexpMatchString = '/^('.self::CALCULATION_REGEXP_FUNCTION.
-                               '|'.self::CALCULATION_REGEXP_CELLREF.
-                               '|'.self::CALCULATION_REGEXP_NUMBER.
-                               '|'.self::CALCULATION_REGEXP_STRING.
-                               '|'.self::CALCULATION_REGEXP_OPENBRACE.
-                               '|'.self::CALCULATION_REGEXP_NAMEDRANGE.
-                               '|'.self::CALCULATION_REGEXP_ERROR.
-                             ')/si';
+            '|'.self::CALCULATION_REGEXP_CELLREF.
+            '|'.self::CALCULATION_REGEXP_NUMBER.
+            '|'.self::CALCULATION_REGEXP_STRING.
+            '|'.self::CALCULATION_REGEXP_OPENBRACE.
+            '|'.self::CALCULATION_REGEXP_NAMEDRANGE.
+            '|'.self::CALCULATION_REGEXP_ERROR.
+            ')/si';
 
         //    Start with initialisation
         $index = 0;
         $stack = new PHPExcel_Calculation_Token_Stack;
         $output = array();
         $expectingOperator = false;                    //    We use this test in syntax-checking the expression to determine when a
-                                                    //        - is a negation or + is a positive operator rather than an operation
+        //        - is a negation or + is a positive operator rather than an operation
         $expectingOperand = false;                    //    We use this test in syntax-checking the expression to determine whether an operand
-                                                    //        should be null in a function call
+        //        should be null in a function call
         //    The guts of the lexical parser
         //    Loop through the formula extracting each operator and operand in turn
         while (true) {
 //echo 'Assessing Expression '.substr($formula, $index), PHP_EOL;
-            $opCharacter = $formula{$index};    //    Get the first character of the value at the current index position
+            $opCharacter = $formula[$index];    //    Get the first character of the value at the current index position
 //echo 'Initial character of expression block is '.$opCharacter, PHP_EOL;
-            if ((isset(self::$comparisonOperators[$opCharacter])) && (strlen($formula) > $index) && (isset(self::$comparisonOperators[$formula{$index+1}]))) {
-                $opCharacter .= $formula{++$index};
+            if ((isset(self::$comparisonOperators[$opCharacter])) && (strlen($formula) > $index) && (isset(self::$comparisonOperators[$formula[$index+1]]))) {
+                $opCharacter .= $formula[++$index];
 //echo 'Initial character of expression block is comparison operator '.$opCharacter.PHP_EOL;
             }
 
@@ -3367,7 +3367,7 @@ class PHPExcel_Calculation
 //                    echo 'Element is a Variable, Constant, String, Number or Boolean<br />';
                     //    If the last entry on the stack was a : operator, then we may have a row or column range reference
                     $testPrevOp = $stack->last(1);
-                    if ($testPrevOp['value'] == ':') {
+                    if (!empty($testPrevOp['value']) && ($testPrevOp['value'] == ':')) {
                         $startRowColRef = $output[count($output)-1]['value'];
                         $rangeWS1 = '';
                         if (strpos('!', $startRowColRef) !== false) {
@@ -3454,11 +3454,11 @@ class PHPExcel_Calculation
                 }
             }
             //    Ignore white space
-            while (($formula{$index} == "\n") || ($formula{$index} == "\r")) {
+            while (($formula[$index] == "\n") || ($formula[$index] == "\r")) {
                 ++$index;
             }
-            if ($formula{$index} == ' ') {
-                while ($formula{$index} == ' ') {
+            if ($formula[$index] == ' ') {
+                while ($formula[$index] == ' ') {
                     ++$index;
                 }
                 //    If we're expecting an operator, but only have a space between the previous and next operands (and both are
@@ -3666,7 +3666,7 @@ class PHPExcel_Calculation
                         break;
                 }
 
-            // if the token is a unary operator, pop one value off the stack, do the operation, and push it back on
+                // if the token is a unary operator, pop one value off the stack, do the operation, and push it back on
             } elseif (($token === '~') || ($token === '%')) {
 //                echo 'Token is a unary operator<br />';
                 if (($arg = $stack->pop()) === null) {
@@ -3778,7 +3778,7 @@ class PHPExcel_Calculation
                 }
                 $stack->push('Value', $cellValue, $cellRef);
 
-            // if the token is a function, pop arguments off the stack, hand them to the function, and push the result back on
+                // if the token is a function, pop arguments off the stack, hand them to the function, and push the result back on
             } elseif (preg_match('/^'.self::CALCULATION_REGEXP_FUNCTION.'$/i', $token, $matches)) {
 //                echo 'Token is a function<br />';
                 $functionName = $matches[1];
@@ -3888,10 +3888,10 @@ class PHPExcel_Calculation
 //                    echo 'Token is a PHPExcel constant: '.$excelConstant.'<br />';
                     $stack->push('Constant Value', self::$excelConstants[$excelConstant]);
                     $this->_debugLog->writeDebugLog('Evaluating Constant ', $excelConstant, ' as ', $this->showTypeDetails(self::$excelConstants[$excelConstant]));
-                } elseif ((is_numeric($token)) || ($token === null) || (is_bool($token)) || ($token == '') || ($token{0} == '"') || ($token{0} == '#')) {
+                } elseif ((is_numeric($token)) || ($token === null) || (is_bool($token)) || ($token == '') || ($token[0] == '"') || ($token[0] == '#')) {
 //                    echo 'Token is a number, boolean, string, null or an Excel error<br />';
                     $stack->push('Value', $token);
-                // if the token is a named range, push the named range name onto the stack
+                    // if the token is a named range, push the named range name onto the stack
                 } elseif (preg_match('/^'.self::CALCULATION_REGEXP_NAMEDRANGE.'$/i', $token, $matches)) {
 //                    echo 'Token is a named range<br />';
                     $namedRange = $matches[6];
@@ -3933,13 +3933,13 @@ class PHPExcel_Calculation
         if (is_string($operand)) {
             //    We only need special validations for the operand if it is a string
             //    Start by stripping off the quotation marks we use to identify true excel string values internally
-            if ($operand > '' && $operand{0} == '"') {
+            if ($operand > '' && $operand[0] == '"') {
                 $operand = self::unwrapResult($operand);
             }
             //    If the string is a numeric value, we treat it as a numeric, so no further testing
             if (!is_numeric($operand)) {
                 //    If not a numeric, test to see if the value is an Excel error, and so can't be used in normal binary operations
-                if ($operand > '' && $operand{0} == '#') {
+                if ($operand > '' && $operand[0] == '#') {
                     $stack->push('Value', $operand);
                     $this->_debugLog->writeDebugLog('Evaluation Result is ', $this->showTypeDetails($operand));
                     return false;
@@ -3995,10 +3995,10 @@ class PHPExcel_Calculation
         }
 
         //    Simple validate the two operands if they are string values
-        if (is_string($operand1) && $operand1 > '' && $operand1{0} == '"') {
+        if (is_string($operand1) && $operand1 > '' && $operand1[0] == '"') {
             $operand1 = self::unwrapResult($operand1);
         }
-        if (is_string($operand2) && $operand2 > '' && $operand2{0} == '"') {
+        if (is_string($operand2) && $operand2 > '' && $operand2[0] == '"') {
             $operand2 = self::unwrapResult($operand2);
         }
 
@@ -4121,7 +4121,7 @@ class PHPExcel_Calculation
         } else {
             if ((PHPExcel_Calculation_Functions::getCompatibilityMode() != PHPExcel_Calculation_Functions::COMPATIBILITY_OPENOFFICE) &&
                 ((is_string($operand1) && !is_numeric($operand1) && strlen($operand1)>0) ||
-                 (is_string($operand2) && !is_numeric($operand2) && strlen($operand2)>0))) {
+                    (is_string($operand2) && !is_numeric($operand2) && strlen($operand2)>0))) {
                 $result = PHPExcel_Calculation_Functions::VALUE();
             } else {
                 //    If we're dealing with non-matrix operations, execute the necessary operation
